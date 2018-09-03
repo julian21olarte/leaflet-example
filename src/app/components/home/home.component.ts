@@ -1,3 +1,4 @@
+import { MarkerService } from './../../services/marker.service';
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
@@ -11,20 +12,20 @@ export class HomeComponent implements OnInit {
   private options: any;
   private layers: Array<any>;
   private marker: any;
-  constructor() {
+  constructor(private markerService: MarkerService) {
     this.options = {
       layers: [
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        // tslint:disable-next-line:max-line-length
-        attribution: 'Cloud Analytic transport <a href="https://www.github.com/julian21olarte/">julian21olarte</a> - <a href="https://www.github.com/brayammora">brayammora</a>'
+          maxZoom: 18,
+          // tslint:disable-next-line:max-line-length
+          attribution: 'Cloud Analytic transport <a href="https://www.github.com/julian21olarte/">julian21olarte</a> - <a href="https://www.github.com/brayammora">brayammora</a>'
         })
       ],
       zoom: 12,
       center: L.latLng(7.8939100, -72.5078200)
     };
 
-    this.marker = this.createMarker(7.8939100, -72.5071200, 'Cucuta');
+    this.marker = this.markerService.createMarker(7.8939100, -72.5071200, 'INFO', 'Cucuta', {draggable: true});
 
     this.layers = [
       this.marker
@@ -47,24 +48,6 @@ export class HomeComponent implements OnInit {
         `<p>Lat: ${event.target._latlng.lat}</p>
         <p>Lng: ${event.target._latlng.lng}</p>`);
     });
-  }
-
-  // get data options for create a new marker
-  private getMarkerOption() {
-    return {
-      draggable: true,
-      icon: L.icon({
-        iconSize: [ 25, 41 ],
-        iconAnchor: [ 13, 41 ],
-        iconUrl: 'assets/marker-icon.png',
-        shadowUrl: 'assets/marker-shadow.png'
-      })
-    };
-  }
-
-  // create marker with popup
-  private createMarker(lat, lon, popupText) {
-    return L.marker([ lat, lon ], this.getMarkerOption()).bindPopup(popupText);
   }
 
   // move marker on map click
